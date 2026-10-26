@@ -1,6 +1,6 @@
-# Guia — Configurando SSH e enviando um projeto para o GitHub
+# Guia — Configurando SSH, clonando e enviando um projeto para o GitHub
 
-Este guia mostra como configurar uma chave SSH no Linux, conectar o computador ao GitHub e enviar um projeto para um repositório remoto.
+Este guia mostra como configurar uma chave SSH no Linux, conectar o computador ao GitHub, clonar um repositório e enviar alterações para o GitHub.
 
 Neste exemplo, será utilizado o repositório:
 
@@ -150,9 +150,86 @@ Isso significa que a conexão SSH está funcionando.
 
 ---
 
-# Enviando o projeto para o GitHub
+# Clonando o repositório do GitHub
 
-## 7. Entrar na pasta do projeto
+## 7. Escolher onde o projeto será salvo
+
+Primeiro, vá para a pasta onde deseja guardar o projeto.
+
+Por exemplo, sua pasta pessoal:
+
+```bash
+cd ~
+```
+
+Ou uma pasta de projetos:
+
+```bash
+cd ~/Projetos
+```
+
+---
+
+## 8. Clonar o repositório
+
+Execute:
+
+```bash
+git clone git@github.com:gustavoguimaraes1/Tetris-POO.git
+```
+
+O Git criará automaticamente uma pasta chamada:
+
+```text
+Tetris-POO
+```
+
+Entre nela:
+
+```bash
+cd Tetris-POO
+```
+
+Confira os arquivos:
+
+```bash
+ls
+```
+
+Confira também o repositório remoto:
+
+```bash
+git remote -v
+```
+
+O resultado deverá ser semelhante a:
+
+```text
+origin  git@github.com:gustavoguimaraes1/Tetris-POO.git (fetch)
+origin  git@github.com:gustavoguimaraes1/Tetris-POO.git (push)
+```
+
+Quando você utiliza `git clone`, não precisa executar novamente:
+
+```bash
+git init
+```
+
+nem:
+
+```bash
+git remote add origin ...
+```
+
+O `git clone` já cria o repositório Git local e configura o `origin`.
+
+---
+
+# Caso o projeto já exista no computador
+
+Se você já criou o projeto localmente e ainda não utilizou `git clone`, siga este caminho.
+
+## 9. Entrar na pasta do projeto
 
 Exemplo:
 
@@ -168,7 +245,7 @@ ls
 
 ---
 
-## 8. Inicializar o Git
+## 10. Inicializar o Git
 
 Dentro da pasta:
 
@@ -178,7 +255,7 @@ git init
 
 ---
 
-## 9. Adicionar o repositório remoto
+## 11. Adicionar o repositório remoto
 
 Execute:
 
@@ -201,7 +278,7 @@ origin  git@github.com:gustavoguimaraes1/Tetris-POO.git (push)
 
 ---
 
-## 10. Caso o `origin` já exista
+## 12. Caso o `origin` já exista
 
 Se aparecer:
 
@@ -219,7 +296,21 @@ git remote set-url origin git@github.com:gustavoguimaraes1/Tetris-POO.git
 
 ---
 
-## 11. Adicionar os arquivos
+# Enviando alterações para o GitHub
+
+## 13. Verificar o estado do repositório
+
+Execute:
+
+```bash
+git status
+```
+
+Isso mostra quais arquivos foram criados, modificados ou removidos.
+
+---
+
+## 14. Adicionar os arquivos
 
 Execute:
 
@@ -227,7 +318,7 @@ Execute:
 git add .
 ```
 
-Confira:
+Confira novamente:
 
 ```bash
 git status
@@ -235,7 +326,7 @@ git status
 
 ---
 
-## 12. Criar o commit
+## 15. Criar o commit
 
 Execute:
 
@@ -243,19 +334,29 @@ Execute:
 git commit -m "Adiciona projeto Tetris POO"
 ```
 
+O commit registra uma versão dos arquivos no histórico local do Git.
+
 ---
 
-## 13. Definir a branch principal
+## 16. Definir a branch principal
 
-Execute:
+Caso seja um repositório novo:
 
 ```bash
 git branch -M main
 ```
 
+Se você utilizou `git clone`, normalmente a branch já estará configurada.
+
+Para conferir:
+
+```bash
+git branch
+```
+
 ---
 
-## 14. Enviar o projeto
+## 17. Enviar o projeto
 
 Execute:
 
@@ -279,6 +380,54 @@ git push
 
 ---
 
+# Fluxo usando `git clone`
+
+Se o repositório já existe no GitHub, o fluxo inicial é:
+
+```bash
+cd ~
+
+git clone git@github.com:gustavoguimaraes1/Tetris-POO.git
+
+cd Tetris-POO
+```
+
+Depois de modificar ou adicionar arquivos:
+
+```bash
+git status
+
+git add .
+
+git commit -m "Descrição da alteração"
+
+git push
+```
+
+---
+
+# Fluxo para um projeto criado no computador
+
+Se o projeto já existe localmente:
+
+```bash
+cd ~/Tetris-POO
+
+git init
+
+git remote add origin git@github.com:gustavoguimaraes1/Tetris-POO.git
+
+git add .
+
+git commit -m "Adiciona projeto Tetris POO"
+
+git branch -M main
+
+git push -u origin main
+```
+
+---
+
 # Fluxo normal depois da configuração
 
 Depois que SSH e repositório já estiverem configurados, o fluxo será:
@@ -295,11 +444,43 @@ git commit -m "Descrição da alteração"
 git push
 ```
 
-Ou:
+Ou diretamente:
 
 ```bash
 git add .
 git commit -m "Atualiza projeto"
+git push
+```
+
+---
+
+# Atualizar o projeto antes de começar a trabalhar
+
+Quando estiver trabalhando em um repositório que também pode ter alterações no GitHub, é recomendável atualizar sua cópia local antes de começar:
+
+```bash
+git pull
+```
+
+Depois faça suas alterações normalmente:
+
+```bash
+git add .
+git commit -m "Descrição da alteração"
+git push
+```
+
+O fluxo fica:
+
+```text
+git pull
+   ↓
+editar arquivos
+   ↓
+git add .
+   ↓
+git commit
+   ↓
 git push
 ```
 
@@ -313,7 +494,7 @@ Se aparecer:
 ! [rejected] main -> main (fetch first)
 ```
 
-significa que existem arquivos no GitHub que ainda não estão no seu computador.
+significa que existem commits no GitHub que ainda não estão no seu computador.
 
 Execute:
 
@@ -369,7 +550,17 @@ cat ~/.ssh/id_ed25519.pub
 ssh -T git@github.com
 ```
 
-## Enviar projeto
+## Clonar um repositório existente
+
+```bash
+cd ~
+
+git clone git@github.com:gustavoguimaraes1/Tetris-POO.git
+
+cd Tetris-POO
+```
+
+## Enviar um projeto local existente
 
 ```bash
 cd ~/Tetris-POO
@@ -390,31 +581,59 @@ git push -u origin main
 ## Atualizações futuras
 
 ```bash
+git pull
+
 git add .
+
 git commit -m "Descrição da alteração"
+
 git push
 ```
 
 ---
 
-## Estrutura mental do processo
+# Estrutura mental do processo
 
-O processo pode ser entendido assim:
+## Quando você clona um projeto
 
 ```text
-Computador
+GitHub
    ↓
-Chave SSH
+git clone
    ↓
-GitHub reconhece seu computador
+Repositório local
    ↓
-Git local
+Editar arquivos
    ↓
-Commit
+git add
    ↓
-Push
+git commit
    ↓
-Repositório no GitHub
+git push
+   ↓
+GitHub
 ```
 
-A chave SSH identifica seu computador para o GitHub, enquanto o Git é responsável por controlar e enviar as versões dos arquivos.
+## Quando você cria o projeto no computador
+
+```text
+Projeto local
+   ↓
+git init
+   ↓
+git remote
+   ↓
+git add
+   ↓
+git commit
+   ↓
+git push
+   ↓
+GitHub
+```
+
+A chave SSH identifica seu computador para o GitHub.
+
+O `git clone` copia um repositório remoto para o computador e já configura automaticamente o Git e o `origin`.
+
+O Git controla as versões dos arquivos, enquanto `commit`, `pull` e `push` permitem sincronizar o histórico entre seu computador e o GitHub.
